@@ -12,6 +12,7 @@ namespace Kontur.Courses.Testing
 	{
 		static void Main()
 		{
+		    
 			if (!CheckTests()) return;
 			var implementations = GetImplementations();
 			CheckIncorrectImplementationsFail(implementations);
@@ -21,7 +22,7 @@ namespace Kontur.Courses.Testing
 		{
 			foreach (var implementation in implementations)
 			{
-				var isCorrectImplementation = implementation == typeof (WordsStatistics_CorrectImplementation);
+				var isCorrectImplementation = implementation == typeof (WordsStatisticsCorrectImplementation);
 				var failed = GetFailedTests(implementation, isCorrectImplementation).ToList();
 				Console.Write(implementation.Name + "\t");
 				if (failed.Any())
@@ -45,13 +46,13 @@ namespace Kontur.Courses.Testing
 				Assembly.GetExecutingAssembly().GetTypes()
 				.Where(typeof (IWordsStatistics).IsAssignableFrom)
 				.Where(t => !t.IsAbstract && !t.IsInterface)
-				.Where(t => t != typeof(WordsStatistics_CorrectImplementation));
+				.Where(t => t != typeof(WordsStatisticsCorrectImplementation));
 		}
 
 		private static bool CheckTests()
 		{
 			Console.WriteLine("Check all tests pass with correct implementation...");
-			var failed = GetFailedTests(typeof(WordsStatistics_CorrectImplementation), true).ToList();
+			var failed = GetFailedTests(typeof(WordsStatisticsCorrectImplementation), true).ToList();
 			if (failed.Any())
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
@@ -81,7 +82,7 @@ namespace Kontur.Courses.Testing
 		private static bool RunTestMethod(Type implementationType, MethodInfo testMethod, bool printError)
 		{
 			Func<IWordsStatistics> createImpl = () => (IWordsStatistics)Activator.CreateInstance(implementationType);
-			var testObj = new WordsStatistics_Tests { createStat = createImpl };
+			var testObj = new WordsStatisticsTests { CreateStat = createImpl };
 			testObj.SetUp();
 			var timeout = GetTimeout(testMethod);
 			try
@@ -109,7 +110,7 @@ namespace Kontur.Courses.Testing
 
 		private static IEnumerable<MethodInfo> GetTestMethods()
 		{
-			var testMethods = typeof(WordsStatistics_Tests).GetMethods(BindingFlags.Instance | BindingFlags.Public)
+			var testMethods = typeof(WordsStatisticsTests).GetMethods(BindingFlags.Instance | BindingFlags.Public)
 				.Where(m => m.GetCustomAttribute<TestAttribute>() != null);
 			return testMethods;
 		}
