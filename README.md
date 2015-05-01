@@ -56,3 +56,5 @@ tenth frame.
 		void Roll(int pins) { ... }
 		int GetScore() { ... }
 	}
+
+Попов Евгений
